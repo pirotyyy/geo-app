@@ -1,0 +1,6 @@
+GOPATH=/go
+DBDRIVER=mysql
+DBUSER=user
+DBPASSWORD=password
+DBNAME=geodb
+DBPORT=sql

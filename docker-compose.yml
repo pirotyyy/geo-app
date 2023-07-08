@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  app:
+    image: golang:1.19.1-alpine
+    container_name: api
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - .:/go/src/github.com/go-geo-server
+    env_file:
+      - src/.go_env
+    tty: true
+  db:
+    image: mysql:8.0
+    container_name: sql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: geodb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    build:
+      context: .
+      dockerfile: db/Dockerfile
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
+    driver: local
