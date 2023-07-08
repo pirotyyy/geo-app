@@ -11,12 +11,15 @@ import (
 
 func main() {
 	fmt.Println("server start")
+	// load .go_env
 	loadEnv()
 	geoHandler := injector.InjectGeoHandler()
 	e := echo.New()
 	handler.InitRouting(e, geoHandler)
+	// set apihost localhost:8080
 	e.Logger.Fatal(e.Start(":8080"))
 }
+
 func loadEnv() {
 	err := godotenv.Load(".go_env")
 

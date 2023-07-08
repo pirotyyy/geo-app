@@ -5,6 +5,7 @@ import (
 	"go-geo-backend/src/domain/repository"
 )
 
+// Define Usecase
 type GeoUsecase interface {
 	Search(string) (geoInfo *model.GeoInfo, err error)
 	History() (accessLogs []*model.AccessLog, err error)
