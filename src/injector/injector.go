@@ -7,6 +7,7 @@ import (
 	"go-geo-backend/src/usecase"
 )
 
+// Dependency Injection
 func InjectDB() infra.SqlHandler {
 	sqlhandler := infra.NewSqlHandler()
 	return *sqlhandler

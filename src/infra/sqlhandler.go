@@ -17,10 +17,7 @@ func NewSqlHandler() *SqlHandler {
 	dbPass := os.Getenv("DBPASSWORD")
 	dbName := os.Getenv("DBNAME")
 	dbPort := os.Getenv("DBPORT")
-	conn, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@tcp("+dbPort+")/"+dbName)
-	if err != nil {
-		panic(err.Error)
-	}
+	conn, _ := sql.Open(dbDriver, dbUser+":"+dbPass+"@tcp("+dbPort+")/"+dbName)
 
 	sqlHander := new(SqlHandler)
 	sqlHander.Conn = conn

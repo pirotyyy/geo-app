@@ -20,27 +20,23 @@ func NewGeoHandler(geoUsecase usecase.GeoUsecase) GeoHandler {
 	return geoHandler
 }
 
+// Search API
 func (handler *GeoHandler) Search() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		postalCode := c.QueryParam("postal_code")
-		if len(postalCode) != 7 {
-			errorResponse := ErrorResponse{
-				Message: "Invalid PostalCode",
-			}
-			return c.JSON(http.StatusBadRequest, errorResponse)
-		}
 
 		model, err := handler.geoUsecase.Search(postalCode)
 		if err != nil {
 			errorResponse := ErrorResponse{
 				Message: err.Error(),
 			}
-			return c.JSON(http.StatusBadRequest, errorResponse)
+			return c.JSON(http.StatusInternalServerError, errorResponse)
 		}
 		return c.JSON(http.StatusOK, model)
 	}
 }
 
+// AccessLog API
 func (handler *GeoHandler) History() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		models, err := handler.geoUsecase.History()

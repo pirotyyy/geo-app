@@ -25,6 +25,11 @@ func NewGeoRepository(sqlHandler SqlHandler) repository.GeoRepository {
 }
 
 func (geoRepo *GeoRepository) GetGeo(postalCode string) (geoInfo *model.GeoInfo, err error) {
+	if len(postalCode) != 7 {
+		err = errors.New("invalid postalcode")
+		return nil, err
+	}
+
 	url := "https://geoapi.heartrails.com/api/json?method=searchByPostal&postal=" + postalCode
 
 	resp, err := http.Get(url)
