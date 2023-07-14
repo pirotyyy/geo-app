@@ -91,9 +91,35 @@ func (geoRepo *GeoRepository) GetAccessLogs() (accessLogs []*model.AccessLog, er
 }
 
 func findCommonPart(locations []*model.Location) string {
+	var commonParts []string
+	locationsLength := len(locations)
+
+	// マッチした地域が1つだけであれば、比較せず返す
+	if locationsLength == 1 {
+		commonParts = []string{locations[0].Prefecture, locations[0].City, locations[0].Town}
+		return strings.Join(commonParts, "")
+	}
+
+	// マッチした地域が複数個ある場合
+	// Prefectureの比較
+	// 6180000の場合、京都府と大阪府の住所が得られるため、処理する必要がある
+	for i := 0; i < locationsLength-1; i++ {
+		if strings.Compare(locations[i].Prefecture, locations[i+1].Prefecture) != 0 {
+			return ""
+		}
+	}
+
+	// Cityの比較
+	for i := 0; i < locationsLength-2; i++ {
+		if strings.Compare(locations[i].City, locations[i+1].City) != 0 {
+			return ""
+		}
+	}
+
+	// Townの比較
 	re := regexp.MustCompile(`(.+町)?(.+)`)
 	base := re.FindStringSubmatch(locations[0].Town)
-	commonParts := []string{locations[0].Prefecture, locations[0].City, base[1], base[2]}
+	commonParts = []string{locations[0].Prefecture, locations[0].City, base[1], base[2]}
 	flags := []bool{true, true}
 
 	for i := 1; i < len(locations)-1; i++ {
